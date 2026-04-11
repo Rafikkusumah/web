@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\QuotationController;
 use App\Http\Controllers\Admin\InvoiceController;
+use App\Http\Controllers\Admin\Invoice2Controller;
 use App\Http\Controllers\Admin\PdfController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -50,10 +51,23 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::delete('invoices/{invoice}', [InvoiceController::class, 'destroy'])->name('invoices.destroy');
     Route::get('invoices/from-quotation/{quotation}', [InvoiceController::class, 'createFromQuotation'])->name('invoices.from-quotation');
     Route::post('invoices/from-quotation/{quotation}', [InvoiceController::class, 'storeFromQuotation'])->name('invoices.store-from-quotation');
+
+    // Invoice2 Management (Payment Stages)
+    Route::get('invoice2', [Invoice2Controller::class, 'index'])->name('invoice2.index');
+    Route::get('invoice2/create', [Invoice2Controller::class, 'create'])->name('invoice2.create');
+    Route::post('invoice2', [Invoice2Controller::class, 'store'])->name('invoice2.store');
+    Route::get('invoice2/{invoice2}', [Invoice2Controller::class, 'show'])->name('invoice2.show');
+    Route::get('invoice2/{invoice2}/edit', [Invoice2Controller::class, 'edit'])->name('invoice2.edit');
+    Route::put('invoice2/{invoice2}', [Invoice2Controller::class, 'update'])->name('invoice2.update');
+    Route::delete('invoice2/{invoice2}', [Invoice2Controller::class, 'destroy'])->name('invoice2.destroy');
+    Route::patch('invoice2/stages/{stage}/status', [Invoice2Controller::class, 'updateStageStatus'])->name('invoice2.stages.status');
+    Route::get('invoice2/from-quotation/{quotation}', [Invoice2Controller::class, 'createFromQuotation'])->name('invoice2.from-quotation');
+    Route::post('invoice2/from-quotation/{quotation}', [Invoice2Controller::class, 'storeFromQuotation'])->name('invoice2.store-from-quotation');
     
     // PDF Downloads
     Route::get('quotations/{quotation}/pdf', [PdfController::class, 'downloadQuotation'])->name('quotations.pdf');
     Route::get('invoices/{invoice}/pdf', [PdfController::class, 'downloadInvoice'])->name('invoices.pdf');
+    Route::get('invoice2/{invoice2}/pdf', [PdfController::class, 'downloadInvoice2'])->name('invoice2.pdf');
 });
 
 Route::get('/dashboard', function () {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Quotation;
 use App\Models\Invoice;
+use App\Models\Invoice2;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class PdfController extends Controller
@@ -65,5 +66,35 @@ class PdfController extends Controller
         
         $pdf = Pdf::loadView('pdf.invoice', $data);
         return $pdf->download('Invoice-' . $invoice->invoice_number . '.pdf');
+    }
+
+    public function downloadInvoice2(Invoice2 $invoice2)
+    {
+        $invoice2->load(['items', 'stages']);
+
+        $data = [
+            'type' => 'Invoice',
+            'document_number' => $invoice2->invoice_number,
+            'document_date' => $invoice2->invoice_date->format('F d, Y'),
+            'valid_until' => $invoice2->due_date->format('F d, Y'),
+            'salesperson' => $invoice2->salesperson,
+            'company_name' => $invoice2->company_name,
+            'address' => $invoice2->address,
+            'city' => $invoice2->city,
+            'zip_code' => $invoice2->zip_code,
+            'project_description' => $invoice2->project_description,
+            'items' => $invoice2->items,
+            'subtotal' => $invoice2->subtotal,
+            'use_vat' => $invoice2->use_vat,
+            'vat_percentage' => $invoice2->vat_percentage,
+            'vat_amount' => $invoice2->vat_amount,
+            'total' => $invoice2->total,
+            'notes' => $invoice2->notes,
+            'terms' => $invoice2->terms,
+            'stages' => $invoice2->stages,
+        ];
+
+        $pdf = Pdf::loadView('pdf.invoice2', $data);
+        return $pdf->download('Invoice2-' . $invoice2->invoice_number . '.pdf');
     }
 }

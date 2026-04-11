@@ -10,14 +10,17 @@
                 <h2 class="text-2xl font-bold text-gray-900">{{ $quotation->quotation_number }}</h2>
                 <p class="text-gray-600 mt-1">{{ $quotation->company_name }}</p>
             </div>
-            <div class="flex space-x-3">
-                <a href="{{ route('admin.quotations.pdf', $quotation) }}" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+            <div class="flex flex-wrap gap-2">
+                <a href="{{ route('admin.quotations.pdf', $quotation) }}" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 whitespace-nowrap">
                     Download PDF
                 </a>
-                <a href="{{ route('admin.invoices.from-quotation', $quotation) }}" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                <a href="{{ route('admin.invoices.from-quotation', $quotation) }}" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 whitespace-nowrap">
                     Create Invoice
                 </a>
-                <a href="{{ route('admin.quotations.edit', $quotation) }}" class="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700">
+                <a href="{{ route('admin.invoice2.from-quotation', $quotation) }}" class="px-4 py-2 rounded-lg whitespace-nowrap hover:opacity-90" style="background-color: #1e3a5f; color: white;">
+                    Invoice2 (Stages)
+                </a>
+                <a href="{{ route('admin.quotations.edit', $quotation) }}" class="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 whitespace-nowrap">
                     Edit
                 </a>
             </div>
