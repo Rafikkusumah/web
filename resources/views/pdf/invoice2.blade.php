@@ -12,6 +12,12 @@
             color: #333;
         }
 
+        .terbilang-text {
+            font-style: italic;
+            color: #4b5563;
+            font-size: 9pt;
+        }
+
         .letterhead {
             border-bottom: 3px solid #dc2626;
             padding-bottom: 10px;
@@ -289,6 +295,49 @@
     </style>
 </head>
 <body>
+    @php
+    // Helper function to convert number to Indonesian words
+    function terbilang($amount) {
+        $amount = round($amount); // Round to nearest integer to avoid floating point issues
+        $words = ['', 'Satu', 'Dua', 'Tiga', 'Empat', 'Lima', 'Enam', 'Tujuh', 'Delapan', 'Sembilan', 'Sepuluh', 'Sebelas'];
+
+        if ($amount < 0) {
+            return 'Minus ' . terbilang(abs($amount));
+        }
+
+        if ($amount == 0) {
+            return '';
+        }
+
+        if ($amount < 12) {
+            return $words[$amount];
+        } elseif ($amount < 20) {
+            return terbilang($amount - 10) . ' Belas';
+        } elseif ($amount < 100) {
+            return terbilang(intval($amount / 10)) . ' Puluh ' . terbilang($amount % 10);
+        } elseif ($amount < 200) {
+            return 'Seratus ' . terbilang($amount - 100);
+        } elseif ($amount < 1000) {
+            return terbilang(intval($amount / 100)) . ' Ratus ' . terbilang($amount % 100);
+        } elseif ($amount < 2000) {
+            return 'Seribu ' . terbilang($amount - 1000);
+        } elseif ($amount < 1000000) {
+            return terbilang(intval($amount / 1000)) . ' Ribu ' . terbilang($amount % 1000);
+        } elseif ($amount < 1000000000) {
+            return terbilang(intval($amount / 1000000)) . ' Juta ' . terbilang($amount % 1000000);
+        } elseif ($amount < 1000000000000) {
+            return terbilang(intval($amount / 1000000000)) . ' Miliar ' . terbilang($amount % 1000000000);
+        } else {
+            return terbilang(intval($amount / 1000000000000)) . ' Triliun ' . terbilang($amount % 1000000000000);
+        }
+    }
+
+    function formatTerbilang($amount) {
+        $terbilang = strtoupper(trim(preg_replace('/\s+/', ' ', terbilang($amount))));
+        return '(TERBILANG : ' . $terbilang . ' RUPIAH)';
+    }
+    @endphp
+
     <!-- Letterhead -->
     <div class="letterhead">
         <div class="letterhead-left">
@@ -411,16 +460,23 @@
                 }
             }
         @endphp
-        <table style="width: 350px; margin-left: auto; font-size: 10pt;">
+        <table style="width: 480px; margin-left: auto; font-size: 9pt; border-collapse: collapse;">
             @foreach($stages as $index => $stage)
             @php
                 $isHighlight = ($index === $firstUnpaidIndex);
             @endphp
-            <tr>
-                <td style="padding: 6px 15px; text-align: right; color: #333; @if($isHighlight) font-weight: bold; @endif">
+            <tr style="@if($isHighlight) border-bottom: 2px solid #dc2626; @else border-bottom: 1px solid #e5e7eb; @endif">
+                @if($isHighlight)
+                <td style="padding: 6px 8px; text-align: left; font-style: italic; color: #6b7280; font-size: 7.5pt; white-space: nowrap; width: 50%;">
+                    {{ formatTerbilang($stage->stage_amount) }}
+                </td>
+                @else
+                <td style="padding: 6px 8px; text-align: left;"></td>
+                @endif
+                <td style="padding: 6px 8px; text-align: left; @if($isHighlight) font-weight: bold; @endif; font-size: 9pt;">
                     {{ $stage->stage_name }} ({{ $stage->stage_percentage }}%)
                 </td>
-                <td style="padding: 6px 15px; text-align: right; color: #333; @if($isHighlight) font-weight: bold; @endif">
+                <td style="padding: 6px 8px; text-align: right; @if($isHighlight) font-weight: bold; @endif; font-size: 9pt;">
                     Rp {{ number_format($stage->stage_amount, 0, ',', '.') }}
                 </td>
             </tr>

@@ -167,10 +167,10 @@
         <a href="{{ route('admin.invoice2.pdf', $invoice2) }}" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold">
             Download PDF
         </a>
-        <a href="{{ route('admin.invoice2.edit', $invoice2) }}" class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 font-semibold">
+        <a href="{{ route('admin.invoice2.edit', $invoice2) }}" class="px-4 py-2 border-2 border-orange-500 text-black rounded-lg hover:bg-orange-50 font-semibold">
             Edit
         </a>
-        <a href="{{ route('admin.invoice2.index') }}" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+        <a href="{{ route('admin.invoice2.index') }}" class="px-4 py-2 border-2 border-gray-400 text-black rounded-lg hover:bg-gray-50 font-semibold">
             Back to List
         </a>
     </div>
